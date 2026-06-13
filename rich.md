@@ -432,3 +432,54 @@ I can extend this into:
 * 🌈 themed design system (dark/light switching)
 
 Just tell me 👍
+
+
+Yes. In Rich, `Columns` will naturally render each panel to the height of the tallest panel in the row. Shorter panels are padded so both appear the same height.
+
+Example:
+
+```python
+from rich.console import Console
+from rich.panel import Panel
+from rich.columns import Columns
+
+console = Console()
+
+left = Panel(
+    "Short text",
+    title="Left",
+)
+
+right = Panel(
+    "\n".join(f"Line {i}" for i in range(1, 15)),
+    title="Right",
+)
+
+console.print(Columns([left, right], expand=True))
+```
+
+The left panel will automatically be expanded vertically to match the height of the right panel.
+
+If you're using `Layout`, it behaves differently: layouts divide available screen space and don't automatically size themselves to content. For content-driven sizing, `Columns` is usually the better choice.
+
+If you need to know the tallest content height beforehand (for example, to explicitly set panel heights), you can measure the renderables:
+
+```python
+from rich.console import Console
+from rich.panel import Panel
+
+console = Console()
+
+left_text = "Short text"
+right_text = "\n".join(f"Line {i}" for i in range(15))
+
+left_panel = Panel(left_text)
+right_panel = Panel(right_text)
+
+options = console.options
+
+left_height = console.measure(left_text).maximum
+```
+
+However, for most cases, simply using `Columns(..., expand=True)` is enough because Rich handles height equalization automatically during rendering.
+
