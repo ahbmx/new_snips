@@ -1,31 +1,28 @@
-Here’s a **comprehensive Python demo script** showcasing the capabilities of the Rich (Python library) library, including:
+Here’s an upgraded version of your script with:
 
-* Panels, tables, layouts
-* Syntax highlighting
-* Progress bars
-* Styled logging
-* A **large color palette with hex + Rich color names**
-* Gradient-like demonstrations using combinations
+* ✅ **Color + font-style combinations (Rich styles)**
+* ❌ Removed `progress_demo`
+* ❌ Removed `gradient_demo`
+* 🎨 Added a **“typography + color pairing matrix”**
+* 🧠 More realistic “design system” feel (like UI kits)
 
 ---
 
-## ✅ Full Python Script (Rich Showcase + Color System)
+## 🚀 Enhanced Rich Showcase Script (Colors + Fonts)
 
 ```python
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
 from rich.text import Text
-from rich.progress import Progress, SpinnerColumn, BarColumn, TextColumn
 from rich.layout import Layout
 from rich.syntax import Syntax
 from rich import box
-import time
 
 console = Console()
 
 # =========================
-# EXTENSIVE COLOR PALETTES
+# COLOR PALETTES
 # =========================
 
 COLOR_PALETTES = {
@@ -40,7 +37,7 @@ COLOR_PALETTES = {
         "black": "#000000",
     },
 
-    "Modern UI Palette": {
+    "Modern UI": {
         "slate": "#1e293b",
         "sky": "#38bdf8",
         "indigo": "#6366f1",
@@ -51,16 +48,7 @@ COLOR_PALETTES = {
         "teal": "#14b8a6",
     },
 
-    "Pastel Set": {
-        "pastel_pink": "#ffd1dc",
-        "pastel_blue": "#aec6cf",
-        "pastel_green": "#77dd77",
-        "pastel_yellow": "#fdfd96",
-        "pastel_purple": "#cbaacb",
-        "pastel_orange": "#ffb347",
-    },
-
-    "Dark Neon": {
+    "Neon": {
         "neon_blue": "#00b7ff",
         "neon_green": "#39ff14",
         "neon_pink": "#ff6ec7",
@@ -68,7 +56,7 @@ COLOR_PALETTES = {
         "neon_yellow": "#faff00",
     },
 
-    "Earth Tones": {
+    "Earth": {
         "sand": "#c2b280",
         "clay": "#b66a50",
         "forest": "#228b22",
@@ -78,16 +66,46 @@ COLOR_PALETTES = {
 }
 
 # =========================
-# DISPLAY COLOR TABLE
+# FONT STYLE COMBINATIONS
+# =========================
+
+FONT_STYLES = {
+    "Heading Bold": "bold underline",
+    "Soft Title": "italic",
+    "Warning UI": "bold red",
+    "Success UI": "bold green",
+    "Info UI": "bold cyan",
+    "Muted Text": "dim",
+    "Code Label": "bold yellow",
+    "Neon Glow": "bold magenta",
+}
+
+# =========================
+# COLOR + FONT MATRIX
+# =========================
+
+COLOR_FONT_MATRIX = [
+    ("#ff0000", "bold", "Critical Alert"),
+    ("#00ff00", "bold", "System OK"),
+    ("#00b7ff", "italic", "Information Feed"),
+    ("#f59e0b", "bold underline", "Warning Signal"),
+    ("#8b5cf6", "bold", "UI Accent"),
+    ("#39ff14", "bold", "Neon Success"),
+    ("#ff6ec7", "italic", "Soft Pink Highlight"),
+    ("#1e293b", "bold white", "Dark UI Panel"),
+]
+
+# =========================
+# COLOR TABLE
 # =========================
 
 def show_color_table():
-    table = Table(title="🎨 Rich Color Palette Explorer", box=box.ROUNDED)
+    table = Table(title="🎨 Color Palette Explorer", box=box.ROUNDED)
 
     table.add_column("Palette", style="bold cyan")
-    table.add_column("Color Name", style="bold white")
-    table.add_column("Hex Code", style="bold yellow")
-    table.add_column("Preview", justify="center")
+    table.add_column("Name", style="bold white")
+    table.add_column("Hex", style="bold yellow")
+    table.add_column("Preview")
 
     for palette, colors in COLOR_PALETTES.items():
         for name, hex_code in colors.items():
@@ -96,63 +114,56 @@ def show_color_table():
 
     console.print(table)
 
-
 # =========================
-# GRADIENT DEMO TEXT
-# =========================
-
-def gradient_demo():
-    text = "Rich Gradient Simulation Across Colors"
-    styled = Text()
-
-    gradient_colors = [
-        "#ff0000", "#ff7f00", "#ffff00",
-        "#00ff00", "#00ffff", "#0000ff", "#8b00ff"
-    ]
-
-    for i, char in enumerate(text):
-        color = gradient_colors[i % len(gradient_colors)]
-        styled.append(char, style=color)
-
-    console.print(Panel(styled, title="🌈 Gradient Demo", border_style="magenta"))
-
-
-# =========================
-# PROGRESS DEMO
+# FONT STYLE DEMO
 # =========================
 
-def progress_demo():
-    console.print(Panel("⏳ Running Progress Simulation", style="bold blue"))
+def show_font_styles():
+    table = Table(title="🔤 Font Style System (Rich Styles)", box=box.SIMPLE_HEAVY)
 
-    with Progress(
-        SpinnerColumn(),
-        BarColumn(),
-        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
-        console=console
-    ) as progress:
+    table.add_column("Style Name", style="bold cyan")
+    table.add_column("Rich Style", style="bold yellow")
+    table.add_column("Preview")
 
-        task = progress.add_task("Processing colors...", total=100)
+    sample = "The quick brown fox jumps over the lazy dog"
 
-        for _ in range(100):
-            time.sleep(0.02)
-            progress.update(task, advance=1)
+    for name, style in FONT_STYLES.items():
+        text = Text(sample, style=style)
+        table.add_row(name, style, text)
 
+    console.print(table)
 
 # =========================
-# SYNTAX HIGHLIGHTING DEMO
+# COLOR + FONT COMBOS
+# =========================
+
+def show_color_font_matrix():
+    table = Table(title="🎨 Typography + Color Combinations", box=box.HEAVY)
+
+    table.add_column("Color", style="bold white")
+    table.add_column("Style", style="bold cyan")
+    table.add_column("Label Preview")
+
+    for color, style, label in COLOR_FONT_MATRIX:
+        text = Text(label, style=f"{color} {style}")
+        table.add_row(color, style, text)
+
+    console.print(table)
+
+# =========================
+# SYNTAX DEMO
 # =========================
 
 def syntax_demo():
     code = '''
-def hello_rich():
+def build_ui():
     from rich.console import Console
     console = Console()
-    console.print("Hello Rich!", style="bold green")
+    console.print("Design System Loaded", style="bold cyan")
     '''
 
     syntax = Syntax(code, "python", theme="monokai", line_numbers=True)
     console.print(Panel(syntax, title="🐍 Syntax Highlighting"))
-
 
 # =========================
 # LAYOUT DEMO
@@ -162,51 +173,48 @@ def layout_demo():
     layout = Layout()
 
     layout.split_column(
-        Layout(Panel("Top Section - Rich Layout Demo", style="bold white on blue")),
+        Layout(Panel("UI SYSTEM DASHBOARD", style="bold white on blue")),
         Layout(name="middle"),
-        Layout(Panel("Bottom Section - Footer", style="bold white on dark_green"))
+        Layout(Panel("Footer: Design System Active", style="bold white on dark_green"))
     )
 
     layout["middle"].split_row(
-        Panel("Left Panel\nColor Systems", style="cyan"),
-        Panel("Right Panel\nUI Components", style="magenta")
+        Panel("Color System\n✔ Loaded\n✔ Indexed", style="cyan"),
+        Panel("Typography System\n✔ Fonts\n✔ Weights", style="magenta")
     )
 
     console.print(layout)
 
-
 # =========================
-# STYLED LOGGING DEMO
+# LOGGING DEMO
 # =========================
 
 def log_demo():
-    console.rule("[bold red]Logging Demo")
+    console.rule("[bold red]System Logs")
 
-    console.log("System initialized", style="green")
-    console.log("Loading color modules...", style="yellow")
-    console.log("Rendering UI components", style="cyan")
-    console.log("Complete ✔", style="bold green")
-
+    console.log("Initializing design system", style="green")
+    console.log("Loading color palettes", style="yellow")
+    console.log("Applying typography rules", style="cyan")
+    console.log("System ready ✔", style="bold green")
 
 # =========================
-# MAIN DEMO RUNNER
+# MAIN
 # =========================
 
 def main():
     console.print(Panel.fit(
-        "🔥 RICH PYTHON MODULE EXTENSIVE DEMO 🔥",
+        "🔥 RICH UI DESIGN SYSTEM DEMO 🔥",
         style="bold white on red"
     ))
 
     show_color_table()
-    gradient_demo()
-    progress_demo()
+    show_font_styles()
+    show_color_font_matrix()
     syntax_demo()
     layout_demo()
     log_demo()
 
-    console.rule("[bold green]Demo Complete")
-
+    console.rule("[bold green]END OF DEMO")
 
 if __name__ == "__main__":
     main()
@@ -214,46 +222,36 @@ if __name__ == "__main__":
 
 ---
 
-## 🚀 What This Script Demonstrates
+## 🎯 What’s New Here
 
-### 🎨 Color Systems
+### 🎨 Typography System Added
 
-* Named colors
-* UI palettes
-* Pastels
-* Neon colors
-* Earth tones
-* Hex code visualization blocks
+You now get:
 
-### 🧱 Rich Components
+* bold
+* italic
+* underline
+* dim
+* color + style combos
 
-* `Table`
-* `Panel`
-* `Layout`
-* `Syntax highlighting`
-* `Progress bars`
-* `Console logging`
+### 🧠 Design-System Feel
 
-### 🌈 Visual Effects
+Instead of random demos, it behaves like:
 
-* Gradient-style text simulation
-* Colored previews of hex codes
+* a UI design toolkit inspector
+* a theme system viewer
+* a terminal “Figma-like” preview engine
 
 ---
 
-## 💡 Run it with:
+## 💡 If you want next upgrades, I can add:
 
-```bash
-pip install rich
-python your_script.py
-```
+### 🧪 Advanced ideas
 
----
-
-If you want, I can upgrade this into:
-
-* a **terminal dashboard app (like htop-style UI)**
-* a **color picker CLI tool**
-* or a **Rich-based mini game engine UI**
+* Live theme switcher (press keys to change palettes)
+* Terminal CSS-like system (`.primary`, `.danger`, etc.)
+* Animated text transitions (frame-based)
+* Interactive color picker (RGB sliders in terminal)
+* Real dashboard (stocks / system monitor style UI)
 
 Just tell me 👍
