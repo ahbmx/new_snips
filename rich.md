@@ -483,3 +483,99 @@ left_height = console.measure(left_text).maximum
 
 However, for most cases, simply using `Columns(..., expand=True)` is enough because Rich handles height equalization automatically during rendering.
 
+You can measure the rendered height of each panel's content using Rich's rendering API, then set both panel heights to the maximum.
+
+```python
+from rich.console import Console
+from rich.panel import Panel
+from rich.columns import Columns
+
+console = Console()
+
+
+def side_by_side_panels(left_content: str, right_content: str):
+    """Render two panels with matching heights based on tallest content."""
+
+    options = console.options
+
+    # Measure rendered content heights
+    left_lines = console.render_lines(left_content, options)
+    right_lines = console.render_lines(right_content, options)
+
+    max_height = max(len(left_lines), len(right_lines))
+
+    left_panel = Panel(
+        left_content,
+        title="Left",
+        height=max_height + 2,  # panel borders
+    )
+
+    right_panel = Panel(
+        right_content,
+        title="Right",
+        height=max_height + 2,
+    )
+
+    console.print(Columns([left_panel, right_panel], expand=True))
+
+
+# Example
+side_by_side_panels(
+    "Short text",
+    "\n".join(f"Line {i}" for i in range(1, 15)),
+)
+```
+
+A more accurate version accounts for the actual width each column will have (since wrapping affects height):
+
+```python
+from rich.console import Console
+from rich.panel import Panel
+from rich.columns import Columns
+
+console = Console()
+
+
+def create_equal_height_panels(
+    left_content: str,
+    right_content: str,
+    title_left: str = "Left",
+    title_right: str = "Right",
+):
+    width = console.size.width // 2 - 2
+
+    left_panel_tmp = Panel(left_content, width=width)
+    right_panel_tmp = Panel(right_content, width=width)
+
+    left_height = len(console.render_lines(left_panel_tmp))
+    right_height = len(console.render_lines(right_panel_tmp))
+
+    panel_height = max(left_height, right_height)
+
+    left_panel = Panel(
+        left_content,
+        title=title_left,
+        width=width,
+        height=panel_height,
+    )
+
+    right_panel = Panel(
+        right_content,
+        title=title_right,
+        width=width,
+        height=panel_height,
+    )
+
+    return Columns([left_panel, right_panel], expand=True)
+
+
+console.print(
+    create_equal_height_panels(
+        "Short text",
+        "This is a much longer piece of content that may wrap onto "
+        "multiple lines depending on the terminal width.\n" * 5,
+    )
+)
+```
+
+This second version is preferable because it measures the panels after wrapping has been applied, so the calculated height matches what will actually be displayed.
