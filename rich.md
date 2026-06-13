@@ -254,4 +254,181 @@ Instead of random demos, it behaves like:
 * Interactive color picker (RGB sliders in terminal)
 * Real dashboard (stocks / system monitor style UI)
 
+Here’s a **single, complete Python script** using Rich (Python library) that demonstrates **multiple layout patterns in one run**, including:
+
+* header + footer fixed sizing
+* ratio-based columns
+* nested dashboards
+* asymmetric UI blocks
+* mixed text lengths (intentionally uneven)
+
+---
+
+## 🚀 One-File Rich Layout Showcase
+
+```python id="rich_layout_demo_single"
+from rich.console import Console
+from rich.layout import Layout
+from rich.panel import Panel
+
+console = Console()
+
+# =========================
+# ROOT LAYOUT
+# =========================
+layout = Layout()
+
+layout.split_column(
+    Layout(name="header", size=3),
+    Layout(name="body", ratio=1),
+    Layout(name="footer", size=3),
+)
+
+layout["header"].update(
+    Panel("🔥 RICH LAYOUT SHOWCASE - SINGLE SCRIPT DEMO", style="bold white on blue")
+)
+
+layout["footer"].update(
+    Panel("FOOTER: Layout rendering complete ✔", style="bold white on green")
+)
+
+# =========================
+# BODY SPLIT (MAIN DASHBOARD)
+# =========================
+layout["body"].split_row(
+    Layout(name="sidebar", size=28),
+    Layout(name="main", ratio=2),
+    Layout(name="right", ratio=1),
+)
+
+# =========================
+# SIDEBAR (fixed width)
+# =========================
+layout["sidebar"].update(
+    Panel(
+        """SIDEBAR MENU
+
+- Home
+- Analytics
+- Logs
+- Settings
+- Profile
+- Help
+
+(short panel)""",
+        title="Navigation",
+    )
+)
+
+# =========================
+# MAIN AREA (largest column)
+# =========================
+layout["main"].split_column(
+    Layout(name="main_top", ratio=2),
+    Layout(name="main_bottom", ratio=1),
+)
+
+layout["main_top"].update(
+    Panel(
+        """MAIN DASHBOARD
+
+This is the primary content area.
+It expands using ratio=2.
+
+Line 1
+Line 2
+Line 3
+Line 4
+Line 5
+Line 6
+Line 7
+Line 8""",
+        title="Dashboard",
+    )
+)
+
+layout["main_bottom"].update(
+    Panel(
+        """Secondary Panel
+
+- Metrics
+- Status
+- Logs""",
+        title="Quick Info",
+    )
+)
+
+# =========================
+# RIGHT COLUMN (small info panel)
+# =========================
+layout["right"].split_column(
+    Layout(name="top_info", ratio=1),
+    Layout(name="bottom_info", ratio=1),
+)
+
+layout["right"]["top_info"].update(
+    Panel(
+        """SYSTEM INFO
+
+CPU: 34%
+RAM: 62%
+Disk: 71%""",
+        title="System",
+    )
+)
+
+layout["right"]["bottom_info"].update(
+    Panel(
+        """NOTIFICATIONS
+
+✔ Backup complete
+⚠ Update available
+✔ Sync done""",
+        title="Alerts",
+    )
+)
+
+# =========================
+# RENDER
+# =========================
+console.print(layout)
+```
+
+---
+
+## 🧠 What this single script demonstrates
+
+### 📐 Layout mechanics
+
+* `size=3` → fixed header/footer
+* `size=28` → fixed sidebar
+* `ratio=2` → main content dominates space
+* nested split (column inside column)
+
+### 🧱 UI structure
+
+* Header bar (top)
+* 3-column dashboard
+* Main area split vertically
+* Right panel split again into 2 boxes
+
+### 📊 Real-world UI analogy
+
+This is basically a terminal version of:
+
+* Notion layout
+* Admin dashboard
+* VS Code-like UI structure
+
+---
+
+## 🚀 If you want next step
+
+I can extend this into:
+
+* 🔄 live updating dashboard (auto-refreshing CPU stats)
+* 🎮 interactive keyboard-driven UI
+* 🪟 draggable/tmux-like pane simulation
+* 🌈 themed design system (dark/light switching)
+
 Just tell me 👍
