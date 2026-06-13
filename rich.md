@@ -578,4 +578,127 @@ console.print(
 )
 ```
 
-This second version is preferable because it measures the panels after wrapping has been applied, so the calculated height matches what will actually be displayed.
+Use Rich's `Align` and `Text` objects inside the `Panel`.
+
+```python
+from rich.console import Console
+from rich.panel import Panel
+from rich.columns import Columns
+from rich.align import Align
+from rich.text import Text
+
+console = Console()
+
+
+def create_equal_height_panels(
+    left_content: str,
+    right_content: str,
+    left_color: str = "cyan",
+    right_color: str = "magenta",
+):
+    width = console.size.width // 2 - 2
+
+    # Create styled, centered content
+    left_renderable = Align.center(
+        Text(left_content, style=left_color),
+        vertical="middle",
+    )
+
+    right_renderable = Align.center(
+        Text(right_content, style=right_color),
+        vertical="middle",
+    )
+
+    # Measure rendered panels
+    left_tmp = Panel(left_renderable, width=width)
+    right_tmp = Panel(right_renderable, width=width)
+
+    left_height = len(console.render_lines(left_tmp))
+    right_height = len(console.render_lines(right_tmp))
+
+    panel_height = max(left_height, right_height)
+
+    left_panel = Panel(
+        left_renderable,
+        title="Left",
+        width=width,
+        height=panel_height,
+        border_style=left_color,
+    )
+
+    right_panel = Panel(
+        right_renderable,
+        title="Right",
+        width=width,
+        height=panel_height,
+        border_style=right_color,
+    )
+
+    return Columns([left_panel, right_panel], expand=True)
+
+
+console.print(
+    create_equal_height_panels(
+        "Hello World",
+        "This is a much longer block of text\nthat spans multiple lines.",
+        left_color="bold green",
+        right_color="bold yellow",
+    )
+)
+```
+
+### Horizontal centering only
+
+```python
+Align.center(Text(content, style="cyan"))
+```
+
+### Vertical centering inside the panel
+
+```python
+Align.center(
+    Text(content, style="cyan"),
+    vertical="middle",
+)
+```
+
+### Different colors for different words
+
+```python
+from rich.text import Text
+
+text = Text()
+text.append("SUCCESS", style="bold green")
+text.append("\n")
+text.append("42", style="bold yellow")
+text.append(" tests passed", style="white")
+```
+
+Then:
+
+```python
+panel = Panel(
+    Align.center(text, vertical="middle"),
+    border_style="green"
+)
+```
+
+### Rich markup (simplest)
+
+```python
+from rich import print
+
+content = "[bold green]SUCCESS[/bold green]\n[yellow]42 tests passed[/yellow]"
+```
+
+or inside a panel:
+
+```python
+Panel(
+    Align.center(content, vertical="middle"),
+    border_style="green",
+)
+```
+
+Rich will interpret the color tags automatically.
+
